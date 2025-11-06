@@ -10,7 +10,7 @@ function DJControls( { volume, onVolumeChange}){
                 </div>
                 <div>
                     <label htmlFor="volume_range" className="form-label">volume</label>
-                    <input type="range" className="form-range" min="0" max="1" step="0.01" value={volume} onChange={onVolumeChange} id="volume_range"/>
+                    <input type="range" className="form-range" min="0" max="1" step="0.01" onMouseUp={onVolumeChange} id="volume_range"/>
                 </div>
 
                 <div className="form-check">

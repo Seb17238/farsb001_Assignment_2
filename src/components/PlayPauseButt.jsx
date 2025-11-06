@@ -1,9 +1,9 @@
 function PlayPauseButt({ onPlay, onStop}){
     return (
         <>
-        <div className="btn-group" role="group" aria-label="basic mixed sytle examples">
-            <button id="play" className="btn btn-outline-primary" onClick={onPlay}>Play</button>
-            <button id="stop" className="btn btn-outline-danger" onClick={onStop}>Stop</button>
+        <div className="play-pause-buttons" role="group" aria-label="basic mixed sytle examples">
+            <button id="play" className="play-button" onClick={onPlay}>Play</button>
+            <button id="stop" className="stop-button" onClick={onStop}>Stop</button>
         </div>
         </>
     )

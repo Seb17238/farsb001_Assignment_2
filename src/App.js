@@ -145,34 +145,32 @@ useEffect(() => {
 
 
 return (
-    <div>
-        <h2>Strudel Demo</h2>
-        <main>
+    <div className="App strudel-demo">
+        <header className='strudel-header'>
+            <h2>Strudel Demo</h2>
+        </header>
 
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                       <PreProcessTextArea defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>
-                    </div>
-                    <div className="col-md-4">
-
-                        <nav>
-                            <PropButtons/>
-                            <br />
-                            <PlayPauseButt onPlay={()=> {setState("play"); handlePlay()}} onStop={()=>{setState("stop"); handleStop()}}/>
-                        </nav>
-                    </div>
-
-                    <div className="row">
-                        <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(parseFloat(e.target.value))}/>
-                    </div>
-                </div>
-                
+        <main className='strudel-main'>
+            <div className="editor-section">
+            <div className="text-area-wrapper">
+                <PreProcessTextArea defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>
             </div>
-            <div id="editor"></div>
-            <canvas id="roll"></canvas>
-        </main >
-    </div >
+
+            <div className="controls-wrapper">
+                <br />
+                <PlayPauseButt onPlay={() => { setState("play"); handlePlay() }} onStop={() => { setState("stop"); handleStop() }}/>
+                <br />
+                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(parseFloat(e.target.value))}/>
+            </div>
+            </div>
+
+            <div className="editor-canvas">
+                <div id="editor" className="strudel-editor"></div>
+                <canvas id="roll" className="strudel-canvas"></canvas>
+            </div>
+        </main>
+        </div>
+
 );
 
 
