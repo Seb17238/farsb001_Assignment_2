@@ -13,6 +13,7 @@ import DJControls from './components/DJControls';
 import PlayPauseButt from './components/PlayPauseButt';
 import PropButtons from './components/PropButtons';
 import PreProcessTextArea from './components/PreProcessTextArea';
+import { Preprocess } from './utils/PreProcess';
 
 let globalEditor = null;
 
@@ -70,6 +71,9 @@ export default function StrudelDemo() {
 const hasRun = useRef(false);
 
 const handlePlay = () => {
+
+    let outputText = Preprocess({inputText: procText, volume: volume});
+    globalEditor.setCode(outputText);
     globalEditor.evaluate()
 }
 
@@ -78,6 +82,19 @@ const handleStop = () => {
 }
 
 const [songText, setSongText] = useState(stranger_tune)
+
+const [procText, setProcText] = useState(stranger_tune)
+
+const [volume, setVolume] = useState(1);
+
+const [state, setState] = useState("stop");
+
+useEffect(() => {
+    if(state === "play"){
+        handlePlay();
+
+    }
+}, [volume])
 
 
 useEffect(() => {
@@ -142,12 +159,12 @@ return (
                         <nav>
                             <PropButtons/>
                             <br />
-                            <PlayPauseButt onPlay={handlePlay} onStop={handleStop}/>
+                            <PlayPauseButt onPlay={()=> {setState("play"); handlePlay()}} onStop={()=>{setState("stop"); handleStop()}}/>
                         </nav>
                     </div>
 
                     <div className="row">
-                        <DJControls/>
+                        <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(parseFloat(e.target.value))}/>
                     </div>
                 </div>
                 
