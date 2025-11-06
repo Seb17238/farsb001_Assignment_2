@@ -72,7 +72,7 @@ const hasRun = useRef(false);
 
 const handlePlay = () => {
 
-    let outputText = Preprocess({inputText: procText, volume: volume});
+    let outputText = Preprocess({inputText: procText, volume: volume, s1Checked: s1Checked, s2Checked: s2Checked, s3Checked: s3Checked});
     globalEditor.setCode(outputText);
     globalEditor.evaluate()
 }
@@ -88,6 +88,13 @@ const [procText, setProcText] = useState(stranger_tune)
 const [volume, setVolume] = useState(1);
 
 const [state, setState] = useState("stop");
+
+const [s1Checked, setS1Checked] = useState(true);
+
+const [s2Checked, setS2Checked] = useState(false);
+
+const [s3Checked, setS3Checked] = useState(false);
+
 
 useEffect(() => {
     if(state === "play"){
@@ -160,7 +167,7 @@ return (
                 <br />
                 <PlayPauseButt onPlay={() => { setState("play"); handlePlay() }} onStop={() => { setState("stop"); handleStop() }}/>
                 <br />
-                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(parseFloat(e.target.value))}/>
+                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(parseFloat(e.target.value))} s1Checked={s1Checked} setS1Checked={setS1Checked} s2Checked={s2Checked} setS2Checked={setS2Checked} s3Checked={s3Checked} setS3Checked={setS3Checked}/>
             </div>
             </div>
 

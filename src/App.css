@@ -94,6 +94,7 @@
 
 
 .editor-canvas {
+  font-weight: bold;
   display: flex;
   flex-direction: column;
   gap: 1rem;

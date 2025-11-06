@@ -1,4 +1,4 @@
-export function Preprocess({ inputText, volume }) {
+export function Preprocess({ inputText, volume, s1Checked, s2Checked, s3Checked }) {
 
     //console.log(inputText)
 
@@ -6,7 +6,28 @@ export function Preprocess({ inputText, volume }) {
 
     outputText += `\n//all(x => x.gain(${volume}))`
 
-    outputText = outputText.replaceAll('{${VOLUME}}', volume)
+    if (s1Checked) {
+        outputText = outputText.replace(
+            /postgain\(pick\(gain_patterns, pattern\)\)/g,
+            "postgain(pick(gain_patterns, 0))"
+        );
+    }
+
+    if (s2Checked) {
+        outputText = outputText.replace(
+            /postgain\(pick\(gain_patterns, pattern\)\)/g,
+            "postgain(pick(gain_patterns, 1))"
+        );
+    }
+
+    if (s3Checked) {
+        outputText = outputText.replace(
+            /postgain\(pick\(gain_patterns, pattern\)\)/g,
+            "postgain(pick(gain_patterns, 2))"
+        );
+    }
+
+    outputText = outputText.replaceAll('{${VOLUME}}', volume);
 
     let regex = /[a-zA-Z0-9_]+:\s*\n[\s\S]+?\r?\n(?=[a-zA-Z0-9_]+[:/])/gm;
 
@@ -27,7 +48,7 @@ export function Preprocess({ inputText, volume }) {
     }
 
     let matches2 = matches.map(
-        match => match.replaceAll(/(?<!post)gain\(([^\d.]+)\)/g, (match, captureGroup) =>
+        (match) => match.replaceAll(/(?<!post)gain\(([^\d.]+)\)/g, (match, captureGroup) =>
             `gain(${captureGroup}*${volume})`
         )
     );
