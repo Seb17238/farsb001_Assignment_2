@@ -1,4 +1,11 @@
 function GainPatterns({ s1Checked, setS1Checked, s2Checked, setS2Checked, s3Checked, setS3Checked }) {
+
+    const handleChange = (pattern) => {
+        setS1Checked(pattern === 0);
+        setS2Checked(pattern === 1);
+        setS3Checked(pattern === 2);
+    }
+    
     return (
         <>
 
@@ -10,7 +17,7 @@ function GainPatterns({ s1Checked, setS1Checked, s2Checked, setS2Checked, s3Chec
                     type="checkbox"
                     id="s1"
                     checked={s1Checked}
-                    onChange={() => setS1Checked(!s1Checked)}
+                    onChange={() => handleChange(0)}
                 />
                 <label className="form-check-label" htmlFor="s1">Gain Pattern 0</label>
             </div>
@@ -21,7 +28,7 @@ function GainPatterns({ s1Checked, setS1Checked, s2Checked, setS2Checked, s3Chec
                     type="checkbox"
                     id="s2"
                     checked={s2Checked}
-                    onChange={() => setS2Checked(!s2Checked)}
+                    onChange={() => handleChange(1)}
                 />
                 <label className="form-check-label" htmlFor="s2">Gain Pattern 1</label>
             </div>
@@ -32,7 +39,7 @@ function GainPatterns({ s1Checked, setS1Checked, s2Checked, setS2Checked, s3Chec
                     type="checkbox"
                     id="s3"
                     checked={s3Checked}
-                    onChange={() => setS3Checked(!s3Checked)}
+                    onChange={() => handleChange(2)}
                 />
                 <label className="form-check-label" htmlFor="s3">Gain Pattern 2</label>
             </div>

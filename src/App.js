@@ -16,6 +16,8 @@ import PreProcessTextArea from './components/PreProcessTextArea';
 import { Preprocess } from './utils/PreProcess';
 import GainPatterns from './components/GainPatterns';
 import AreggiatorSelect from './components/ArpeggiatorSelect';
+import D3Graph from './components/D3Graph';
+
 
 let globalEditor = null;
 
@@ -68,6 +70,15 @@ const handleD3Data = (event) => {
 //     return replace
 // }
 
+function getBeatIntervalForPattern(patternIndex) {
+  switch (patternIndex) {
+    case 0: return "1/2";
+    case 1: return "1/4";
+    case 2: return "1/8";
+    default: return "1/4";
+  }
+}
+
 export default function StrudelDemo() {
 
 const hasRun = useRef(false);
@@ -110,17 +121,32 @@ const [cpm, setCpm] = useState(10);
 
 const [selectedArp, setSelectedArp] = useState("0");
 
+const patternIndex =
+      s1Checked ? 0 :
+      s2Checked ? 1 :
+      s3Checked ? 2 : 0;
 
-
+const interval = getBeatIntervalForPattern(patternIndex);
 
 
 useEffect(() => {
-    
-    if(state === "play") {
+
+    if (state === "play") {
         handlePlay();
 
     }
 }, [volume, s1Checked, s2Checked, s3Checked, cpm, selectedArp]);
+
+
+
+// useEffect(() => {
+    
+//     D3Graph();
+//     if(state === "play") {
+//         handlePlay();
+
+//     }
+// }, [volume, s1Checked, s2Checked, s3Checked, cpm, selectedArp]);
 
 
 useEffect(() => {
@@ -199,6 +225,10 @@ return (
                 selectedArp={selectedArp} 
                 setSelectedArp={setSelectedArp} />
                 </div>
+                <div className="d3-container">
+                    <D3Graph beatInterval={interval} />
+                </div>
+
                 
             </div>
 
