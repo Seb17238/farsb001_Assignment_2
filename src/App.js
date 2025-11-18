@@ -7,13 +7,15 @@ import { initAudioOnFirstClick } from '@strudel/webaudio';
 import { transpiler } from '@strudel/transpiler';
 import { getAudioContext, webaudioOutput, registerSynthSounds } from '@strudel/webaudio';
 import { registerSoundfonts } from '@strudel/soundfonts';
-import { stranger_tune } from './tunes';
+import { stranger_tune} from './tunes';
 import console_monkey_patch, { getD3Data } from './console-monkey-patch';
 import DJControls from './components/DJControls';
 import PlayPauseButt from './components/PlayPauseButt';
 import PropButtons from './components/PropButtons';
 import PreProcessTextArea from './components/PreProcessTextArea';
 import { Preprocess } from './utils/PreProcess';
+import GainPatterns from './components/GainPatterns';
+import AreggiatorSelect from './components/ArpeggiatorSelect';
 
 let globalEditor = null;
 
@@ -71,11 +73,20 @@ export default function StrudelDemo() {
 const hasRun = useRef(false);
 
 const handlePlay = () => {
+    if (!globalEditor) return;
 
-    let outputText = Preprocess({inputText: procText, volume: volume, s1Checked: s1Checked, s2Checked: s2Checked, s3Checked: s3Checked});
+    const outputText = Preprocess({
+        inputText: procText,
+        volume,
+        s1Checked,
+        s2Checked,
+        s3Checked,
+        selectedArp
+    });
+
     globalEditor.setCode(outputText);
-    globalEditor.evaluate()
-}
+    globalEditor.evaluate();
+};
 
 const handleStop = () => {
     globalEditor.stop()
@@ -95,13 +106,21 @@ const [s2Checked, setS2Checked] = useState(false);
 
 const [s3Checked, setS3Checked] = useState(false);
 
+const [cpm, setCpm] = useState(10);
+
+const [selectedArp, setSelectedArp] = useState("0");
+
+
+
+
 
 useEffect(() => {
-    if(state === "play"){
+    
+    if(state === "play") {
         handlePlay();
 
     }
-}, [volume])
+}, [volume, s1Checked, s2Checked, s3Checked, cpm, selectedArp]);
 
 
 useEffect(() => {
@@ -165,10 +184,22 @@ return (
 
             <div className="controls-wrapper">
                 <br />
-                <PlayPauseButt onPlay={() => { setState("play"); handlePlay() }} onStop={() => { setState("stop"); handleStop() }}/>
+                <PlayPauseButt onPlay={() => { setState("play"); handlePlay() }} 
+                onStop={() => { setState("stop"); handleStop() }}/>
                 <br />
-                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(parseFloat(e.target.value))} s1Checked={s1Checked} setS1Checked={setS1Checked} s2Checked={s2Checked} setS2Checked={setS2Checked} s3Checked={s3Checked} setS3Checked={setS3Checked}/>
-            </div>
+                <DJControls 
+                cpm={cpm} onCpmChange={(value) => setCpm(value)}
+                volume={volume} onVolumeChange={(value) => setVolume(value)} 
+                />   
+                <GainPatterns 
+                s1Checked={s1Checked} setS1Checked={setS1Checked} 
+                s2Checked={s2Checked} setS2Checked={setS2Checked} 
+                s3Checked={s3Checked} setS3Checked={setS3Checked}  />   
+                <AreggiatorSelect 
+                selectedArp={selectedArp} 
+                setSelectedArp={setSelectedArp} />
+                </div>
+                
             </div>
 
             <div className="editor-canvas">
