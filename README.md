@@ -60,3 +60,7 @@ The Preprocess function takes the song text and dynamically adjusts it based on 
 # App.js
 
 App.js serves as the main file of the Strudel Demo application. It manages the overall layout, state management, and interaction between all components and utils. State variables are used to track user settings, including volume, CPM, gain patterns, arpeggiator selection, and the preprocessed song text. Whenever a user interacts with a control, such as changing the volume, switching gain patterns, or selecting a new arpeggiator. The corresponding state is updated, and the Preprocess function is called to update the song code. The file also includes handlers for saving and loading user settings as JSON. This allows users to export their current configuration and later reload it. Finally the App.js integrates the D3 graph component, which shows the current gain pattern. This show a visual on the differences in the gain patterns
+
+# YouTube Video Link
+
+    https://youtu.be/17YTNgCXuCA

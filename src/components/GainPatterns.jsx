@@ -1,5 +1,7 @@
 function GainPatterns({ s1Checked, setS1Checked, s2Checked, setS2Checked, s3Checked, setS3Checked }) {
 
+
+     // Handle checkbox selection: only one can be selected at a time
     const handleChange = (pattern) => {
         setS1Checked(pattern === 0);
         setS2Checked(pattern === 1);

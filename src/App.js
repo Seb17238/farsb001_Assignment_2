@@ -21,55 +21,13 @@ import D3Graph from './components/D3Graph';
 
 let globalEditor = null;
 
+// Handle custom event from D3 graph
 const handleD3Data = (event) => {
     console.log(event.detail);
 };
 
-// export function SetupButtons() {
 
-//     document.getElementById('play').addEventListener('click', () => globalEditor.evaluate());
-//     document.getElementById('stop').addEventListener('click', () => globalEditor.stop());
-//     document.getElementById('process').addEventListener('click', () => {
-//         Proc()
-//     }
-//     )
-//     document.getElementById('process_play').addEventListener('click', () => {
-//         if (globalEditor != null) {
-//             Proc()
-//             globalEditor.evaluate()
-//         }
-//     }
-//     )
-// }
-
-
-
-// export function ProcAndPlay() {
-//     if (globalEditor != null && globalEditor.repl.state.started == true) {
-//         console.log(globalEditor)
-//         Proc()
-//         globalEditor.evaluate();
-//     }
-// }
-
-// export function Proc() {
-
-//     let proc_text = document.getElementById('proc').value
-//     let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
-//     ProcessText(proc_text);
-//     globalEditor.setCode(proc_text_replaced)
-// }
-
-// export function ProcessText(match, ...args) {
-
-//     let replace = ""
-//     // if (document.getElementById('flexRadioDefault2').checked) {
-//     //     replace = "_"
-//     // }
-
-//     return replace
-// }
-
+// Map pattern index to beat interval
 function getBeatIntervalForPattern(patternIndex) {
   switch (patternIndex) {
     case 0: return "1/2";
@@ -83,9 +41,11 @@ export default function StrudelDemo() {
 
 const hasRun = useRef(false);
 
+// Play button handler
 const handlePlay = () => {
     if (!globalEditor) return;
 
+    // Preprocess code before sending to Strudel editor
     const outputText = Preprocess({
         inputText: procText,
         volume,
@@ -99,10 +59,12 @@ const handlePlay = () => {
     globalEditor.evaluate();
 };
 
+// Stop button handler
 const handleStop = () => {
     globalEditor.stop()
 }
 
+// State variables
 const [songText, setSongText] = useState(stranger_tune)
 
 const [procText, setProcText] = useState(stranger_tune)
@@ -121,6 +83,7 @@ const [cpm, setCpm] = useState(10);
 
 const [selectedArp, setSelectedArp] = useState("0");
 
+// Determine which gain pattern is active
 const patternIndex =
       s1Checked ? 0 :
       s2Checked ? 1 :
@@ -128,6 +91,8 @@ const patternIndex =
 
 const interval = getBeatIntervalForPattern(patternIndex);
 
+
+// Save current settings as JSON
 const saveSettings = () => {
   const stateToSave = { cpm, volume, s1Checked, s2Checked, s3Checked, selectedArp, procText };
   const jsonStr = JSON.stringify(stateToSave, null, 2);
@@ -140,6 +105,7 @@ const saveSettings = () => {
   URL.revokeObjectURL(url);
 };
 
+// Load settings from JSON file
 const loadSettings = (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -165,6 +131,8 @@ const loadSettings = (event) => {
 };
 
 
+
+// Re-run code when settings change
 useEffect(() => {
 
     if (state === "play") {
@@ -174,17 +142,7 @@ useEffect(() => {
 }, [volume, s1Checked, s2Checked, s3Checked, cpm, selectedArp]);
 
 
-
-// useEffect(() => {
-    
-//     D3Graph();
-//     if(state === "play") {
-//         handlePlay();
-
-//     }
-// }, [volume, s1Checked, s2Checked, s3Checked, cpm, selectedArp]);
-
-
+// Initialize Strudel editor and audio once
 useEffect(() => {
 
     if (!hasRun.current) {
@@ -225,6 +183,8 @@ useEffect(() => {
 
 }, []);
 
+
+// Update code in editor when songText changes
 useEffect(() => {
     if (globalEditor) {
         globalEditor.setCode(songText);
