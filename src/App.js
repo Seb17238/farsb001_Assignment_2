@@ -128,6 +128,42 @@ const patternIndex =
 
 const interval = getBeatIntervalForPattern(patternIndex);
 
+const saveSettings = () => {
+  const stateToSave = { cpm, volume, s1Checked, s2Checked, s3Checked, selectedArp, procText };
+  const jsonStr = JSON.stringify(stateToSave, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "strudel_settings.json";
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
+const loadSettings = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const loadedState = JSON.parse(e.target.result);
+      setCpm(loadedState.cpm);
+      setVolume(loadedState.volume);
+      setS1Checked(loadedState.s1Checked);
+      setS2Checked(loadedState.s2Checked);
+      setS3Checked(loadedState.s3Checked);
+      setSelectedArp(loadedState.selectedArp);
+      setProcText(loadedState.procText || stranger_tune);
+      if(globalEditor) globalEditor.setCode(loadedState.procText || stranger_tune);
+    } catch(err) {
+      alert("Invalid JSON file");
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+};
+
 
 useEffect(() => {
 
@@ -212,6 +248,12 @@ return (
                 <br />
                 <PlayPauseButt onPlay={() => { setState("play"); handlePlay() }} 
                 onStop={() => { setState("stop"); handleStop() }}/>
+                <div className="json-buttons mt-2">
+                        <button className="btn btn-primary me-2" onClick={saveSettings}>Save Settings</button>
+                        <input type="file" accept="application/json" onChange={loadSettings} 
+                        style={{ display: "none" }} id="load-settings" />
+                        <label htmlFor="load-settings" className="btn btn-secondary">Load Settings</label>
+                </div>
                 <br />
                 <DJControls 
                 cpm={cpm} onCpmChange={(value) => setCpm(value)}
@@ -225,6 +267,8 @@ return (
                 selectedArp={selectedArp} 
                 setSelectedArp={setSelectedArp} />
                 </div>
+
+                
                 <div className="d3-container">
                     <D3Graph beatInterval={interval} />
                 </div>

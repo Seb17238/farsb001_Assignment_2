@@ -5,11 +5,9 @@ function GainPatterns({ s1Checked, setS1Checked, s2Checked, setS2Checked, s3Chec
         setS2Checked(pattern === 1);
         setS3Checked(pattern === 2);
     }
-    
+
     return (
         <>
-
-                
 
             <div className="form-check">
                 <input
